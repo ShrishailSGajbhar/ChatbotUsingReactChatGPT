@@ -1,12 +1,40 @@
 # uvicorn main:app
 # uvicorn main:app --reload
 
-from fastapi import FastAPI
+# Main imports
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from decouple import config
+import openai
 
+# Custom imports
+# ...
+
+# Initialize the app
 app = FastAPI()
 
-@app.get("/")
+
+# CORS - origins
+origins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:4173",
+    "http://localhost:4174",
+    "http://localhost:3000"
+]
+
+# CORS - middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials = True,
+    allow_methods = ["*"],
+    allow_headers = ["*"]
+
+)
+
+@app.get("/health")
 async def root():
-    print("Test route!")
-    return {"message": "Hello World!"}
+    return {"message": "healthy!"}
 
