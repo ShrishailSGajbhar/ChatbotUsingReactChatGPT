@@ -1,0 +1,2 @@
+fastapi
+uvicorn[standard] # uvicorn with pure Python dependency
