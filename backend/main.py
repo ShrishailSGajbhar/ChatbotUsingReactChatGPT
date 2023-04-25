@@ -9,7 +9,7 @@ from decouple import config
 import openai
 
 # Custom imports
-# ...
+from functions.openai_requests import convert_audio_to_text
 
 # Initialize the app
 app = FastAPI()
@@ -33,8 +33,26 @@ app.add_middleware(
     allow_headers = ["*"]
 
 )
-
+# Health check endpoint
 @app.get("/health")
 async def root():
     return {"message": "healthy!"}
+
+# Get the audio
+@app.post("/post-audio-get/")
+async def get_audio(file: UploadFile=File(...)):
+    
+    audio_input = open("voice.mp3", 'rb')
+    text = convert_audio_to_text(audio_input)
+    return {"text": text}
+
+
+# Post the audio
+# Note: not playing in browser when using the post request
+# @app.post("/post-audio/")
+# async def post_audio(file: UploadFile=File(...)):
+#     print("hello")
+
+
+
 
